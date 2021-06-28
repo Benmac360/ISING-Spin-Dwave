@@ -129,7 +129,7 @@ if __name__ == "__main__":
             energy = econf(Lx,J,S0d)
             
             
-            configs.append(S0)
+            configs.append(S0d)
             energies.append(energy)
             
     
