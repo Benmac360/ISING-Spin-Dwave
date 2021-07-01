@@ -94,8 +94,7 @@ def run_on_qpu(Js,hs, sampler):
                                      ,reduce_intersample_correlation=True\
                                          ,programming_thermalization=0\
                                              ,annealing_time = 1\
-                                                 ,readout_thermalization=0\
-                                     ,postprocess='sampling',beta=2.0,answer_mode='histogram')
+                                                 ,readout_thermalization=0,answer_mode='raw')
 
     return sample_set
 
