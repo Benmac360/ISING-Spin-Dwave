@@ -16,7 +16,7 @@ def get_token():
     '''Return your personal access token'''
     
     # TODO: Enter your token here
-    return 'DEV-30eb956b4ee910c5256faf901be0ae73cc286dfc'
+    return 'DEV-72e917fd4ea4ddce6f280027334fe5b8133d71c4'
 
 
 Lx=10
@@ -92,9 +92,9 @@ def run_on_qpu(Js,hs, sampler):
 
     sample_set = sampler.sample_ising(h=hs,J=Js, num_reads=numruns, label='ISING Glass open BCs'\
                                      ,reduce_intersample_correlation=True\
-                                         ,programming_thermalization=5\
-                                             ,annealing_time = 40\
-                                                 ,readout_thermalization=5\
+                                         ,programming_thermalization=0\
+                                             ,annealing_time = 1\
+                                                 ,readout_thermalization=0\
                                      ,postprocess='sampling',beta=2.0,answer_mode='histogram')
 
     return sample_set
@@ -113,30 +113,30 @@ if __name__ == "__main__":
     qpu_2000q = DWaveSampler(solver={'topology__type': 'chimera'})
 
     sampler = EmbeddingComposite(qpu_2000q)
+    for i in range(10):
+        sample_set = run_on_qpu(Js,hs, sampler)
 
-    sample_set = run_on_qpu(Js,hs, sampler)
-
-    print(sample_set)
-    configs = []
-    energies = []
-    
-    for i in range(sample_set.record.size):
-        for j in range(sample_set.record[i][2]):
-            
-            S0 = sample_set._record[i]['sample']
-      
-            S0d = np.reshape(S0,(Lx,Lx),order='F')
-            energy = econf(Lx,J,S0d)
-            
-            
-            configs.append(S0d)
-            energies.append(energy)
-            
-    
-    
-    
-    np.save('configs.npy',np.asarray(configs))
-    np.savetxt('energies.txt',energies)
+        print(sample_set)
+        configs = []
+        energies = []
+        
+        for i in range(sample_set.record.size):
+            for j in range(sample_set.record[i][2]):
+                
+                S0 = sample_set._record[i]['sample']
+        
+                S0d = np.reshape(S0,(Lx,Lx),order='F')
+                energy = econf(Lx,J,S0d)
+                
+                
+                configs.append(S0d)
+                energies.append(energy)
+                
+        
+        
+        
+        np.save('configs'+str(i)+'.npy',np.asarray(configs))
+        np.savetxt('energies'+str(i)+'.txt',energies)
 
 
 # dwave.inspector.show(sample_set)
