@@ -112,7 +112,7 @@ if __name__ == "__main__":
     qpu_2000q = DWaveSampler(solver={'topology__type': 'chimera'})
 
     sampler = EmbeddingComposite(qpu_2000q)
-    for i in range(10):
+    for k in range(10):
         sample_set = run_on_qpu(Js,hs, sampler)
 
         print(sample_set)
@@ -134,8 +134,8 @@ if __name__ == "__main__":
         
         
         
-        np.save('configs'+str(i)+'.npy',np.asarray(configs))
-        np.savetxt('energies'+str(i)+'.txt',energies)
+        np.save('configs'+str(k)+'.npy',np.asarray(configs))
+        np.savetxt('energies'+str(k)+'.txt',energies)
 
 
 # dwave.inspector.show(sample_set)
