@@ -93,7 +93,7 @@ def run_on_qpu(Js,hs, sampler):
     sample_set = sampler.sample_ising(h=hs,J=Js, num_reads=numruns, label='ISING Glass open BCs'\
                                      ,reduce_intersample_correlation=True\
                                          ,programming_thermalization=0\
-                                             ,annealing_time = 1\
+                                             ,annealing_time = 50\
                                                  ,readout_thermalization=0,answer_mode='raw')
 
     return sample_set
