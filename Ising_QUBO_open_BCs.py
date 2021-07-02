@@ -102,7 +102,7 @@ def run_on_qpu(Js,hs, sampler):
 if __name__ == "__main__":
 
     
-    numruns = 5
+    numruns = 10000
     Js = get_Js()
     
     # bqm = dimod.BQM.from_qubo(Js)
