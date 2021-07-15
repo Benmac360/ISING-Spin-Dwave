@@ -67,7 +67,7 @@ def get_Js(J=J,Lx=Lx):
                 
                 
             if ky > 0 and kx !=Lx-1:
-                JUR=J2[int(kUR),1]*1.
+                JUR=J2[int(kUR),0]*1.
                 Js.update({(k,UR):JUR})
                
         
