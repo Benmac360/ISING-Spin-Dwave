@@ -22,7 +22,7 @@ Lx=10
 N=Lx**2
 np.random.seed(12345)
 J = (np.random.normal(0.0,1.0,size=(N-Lx,2)))*-1.
-J2 = (np.random.normal(0.0,1.0,size=((Lx-1)**2,2)))
+J2 = (np.random.normal(0.0,1.0,size=((Lx-1)**2,2)))*-1.
 np.savetxt('coplings.txt',J)
 
 Js = {} 
