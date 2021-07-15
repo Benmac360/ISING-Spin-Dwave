@@ -56,7 +56,7 @@ def get_Js(J=J,Lx=Lx):
             
             
             kDR = k-ky              #coupling down right
-            kUR = UR - ky     #coupling up right
+            kUR = k-Lx - ky     #coupling up right
             
             
             
