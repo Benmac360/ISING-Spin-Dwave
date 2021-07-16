@@ -52,20 +52,15 @@ def get_Js(J=J,Lx=Lx):
                
                 
             UR = k - (Lx-1)         # Spin up right
-            DR = k + Lx +1          # spin down right
+            DR = k + (Lx +1)         # spin down right
             
-            
-            kDR = k-ky              #coupling down right
-            kUR = k-Lx - ky     #coupling up right
-            
-            
-            
+            kUR = (k-Lx - (ky-1))    #coupling up right
+            kDR = k-(ky)      #coupling down right
             
             if k < (Lx*(Lx-1)) and kx !=Lx-1:
                 JDR=J2[int(kDR),1]*1.
                 Js.update({(k,DR):JDR})
-                
-                
+    
             if ky > 0 and kx !=Lx-1:
                 JUR=J2[int(kUR),0]*1.
                 Js.update({(k,UR):JUR})
@@ -80,23 +75,32 @@ def econf(Lx,J,S0):
       for ky in range(Lx):
           
           k = kx +(Lx*ky)
-          R = (kx+1)  #right spin 
-          L = (kx-1)  #left spin 
-          U = (ky-1)  #up spin
+          R = (kx+1)  #right spin
           D = (ky+1)  #down spin 
+          DR = (k+Lx+1)
+          UR = k - (Lx-1)
 
           kR  = (k-ky) #coupling to the right of S0[kx,ky]
-          kU  = (k-Lx) #coupling to the up of S0[kx,ky]   
-          kL  = k-ky-1 #coupling to the left of S0[kx,ky]
           kD  = k      #coupling to the down of S0[kx,ky]
+          kR  = (k-ky) #coupling to the right of S0[kx,ky]
+          kD  = k      #coupling to the down of S0[kx,ky]
+        
+          kUR = (k-Lx - (ky-1))    #coupling up right
+          kDR = k-(ky)      #coupling down right
            
           try: Rs = S0[R,ky]*J[kR,0]   # Tries to find a spin to right, if no spin, contribution is 0.
           except: Rs = 0.0
 
-          try: Ds = S0[kx,D]*J[kD,1]
+          try: Ds = S0[kx,D]*J[kD,1]   # Tries to find a spin down, if no spin, contribution is 0.
           except: Ds = 0.0
 
-          nb = Rs + Ds #+ Ls + Us
+          try: URs = S0[kx+1,ky-1]*J[kUR,0]   # Tries to find a spin to right, if no spin, contribution is 0.
+          except: URs = 0.0
+
+          try: DRs = S0[kx+1,ky+1]*J[kDR,1]   # Tries to find a spin down, if no spin, contribution is 0.
+          except: DRs = 0.0
+
+          nb = Rs + Ds + URs + DRs #+ Ls + Us
           S = S0[kx,ky]
           energy += -S*nb 
   return energy/(Lx**2)
