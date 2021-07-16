@@ -10,7 +10,7 @@ import numpy as np
 
 J = np.loadtxt('Random_couplings.txt')
 J2 = np.loadtxt('Random_couplings2.txt')
-Lx= 10
+Lx= 3
 f= open("spins_sites_and_couplings.txt","w+")
 
 
