@@ -18,7 +18,7 @@ def get_token():
     return 'DEV-72e917fd4ea4ddce6f280027334fe5b8133d71c4'
 
 
-Lx=10
+Lx=4
 N=Lx**2
 np.random.seed(12345)
 J = (np.random.normal(0.0,1.0,size=(N-Lx,2)))*-1.
@@ -71,6 +71,10 @@ def get_Js(J=J,Lx=Lx):
 
 def econf(Lx,J,S0):
   energy = 0.
+  rs_count = 0
+  ds_count = 0
+  urs_count = 0
+  drs_count = 0
   for kx in range(Lx):
       for ky in range(Lx):
           
@@ -88,21 +92,32 @@ def econf(Lx,J,S0):
           kUR = (k-Lx - (ky-1))    #coupling up right
           kDR = k-(ky)      #coupling down right
            
-          try: Rs = S0[R,ky]*J[kR,0]   # Tries to find a spin to right, if no spin, contribution is 0.
+          try: 
+            Rs = S0[R,ky]*J[kR,0]
+            rs_count += 1   # Tries to find a spin to right, if no spin, contribution is 0.
+        
           except: Rs = 0.0
 
-          try: Ds = S0[kx,D]*J[kD,1]   # Tries to find a spin down, if no spin, contribution is 0.
+          try: 
+            Ds = S0[kx,D]*J[kD,1]   # Tries to find a spin down, if no spin, contribution is 0.
+            ds_count +=1
           except: Ds = 0.0
 
-          try: URs = S0[kx+1,ky-1]*J[kUR,0]   # Tries to find a spin to right, if no spin, contribution is 0.
-          except: URs = 0.0
+          if ky > 0 and kx !=Lx-1:
+            URs = S0[kx+1,ky-1]*J2[kUR,0]   # Tries to find a spin to right, if no spin, contribution is 0.
+            urs_count += 1
 
-          try: DRs = S0[kx+1,ky+1]*J[kDR,1]   # Tries to find a spin down, if no spin, contribution is 0.
+          else: URs = 0.0
+
+          try: 
+            DRs = S0[kx+1,ky+1]*J2[kDR,1]   # Tries to find a spin down, if no spin, contribution is 0.
+            drs_count +=1
           except: DRs = 0.0
 
           nb = Rs + Ds + URs + DRs #+ Ls + Us
           S = S0[kx,ky]
-          energy += -S*nb 
+          energy += -S*nb
+  print('rs',rs_count,'ds',ds_count,'urs',urs_count,'drs',drs_count) 
   return energy/(Lx**2)
 
 def run_on_qpu(Js,hs, sampler):
@@ -115,7 +130,7 @@ def run_on_qpu(Js,hs, sampler):
     sample_set = sampler.sample_ising(h=hs,J=Js, num_reads=numruns, label='ISING Glass open BCs'\
                                      ,reduce_intersample_correlation=True\
                                          ,programming_thermalization=0\
-                                             ,annealing_time = 150\
+                                             ,annealing_time = 10\
                                                  ,readout_thermalization=0,answer_mode='raw')
 
     return sample_set
@@ -124,7 +139,7 @@ def run_on_qpu(Js,hs, sampler):
 if __name__ == "__main__":
 
     
-    numruns = 1000
+    numruns = 1
     Js = get_Js()
     
     # bqm = dimod.BQM.from_qubo(Js)
