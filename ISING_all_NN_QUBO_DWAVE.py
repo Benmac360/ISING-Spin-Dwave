@@ -111,7 +111,7 @@ def run_on_qpu(Js,hs, sampler):
     sample_set = sampler.sample_ising(h=hs,J=Js, num_reads=numruns, label='ISING Glass open BCs'\
                                      ,reduce_intersample_correlation=True\
                                          ,programming_thermalization=0\
-                                             ,annealing_time = 50\
+                                             ,annealing_time = 150\
                                                  ,readout_thermalization=0,answer_mode='raw')
 
     return sample_set
@@ -120,17 +120,17 @@ def run_on_qpu(Js,hs, sampler):
 if __name__ == "__main__":
 
     
-    numruns = 10000
+    numruns = 1000
     Js = get_Js()
     
     # bqm = dimod.BQM.from_qubo(Js)
     # sample_set = EmbeddingComposite(DWaveSampler()).sample(bqm, num_reads=numruns)
     
     
-    qpu_2000q = DWaveSampler(solver={'topology__type': 'chimera'})
+    qpu_2000q = DWaveSampler(solver={'topology__type': 'pegasus'})
 
     sampler = EmbeddingComposite(qpu_2000q)
-    for k in range(10):
+    for k in range(1):
         sample_set = run_on_qpu(Js,hs, sampler)
 
         print(sample_set)
