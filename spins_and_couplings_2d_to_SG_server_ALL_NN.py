@@ -34,9 +34,9 @@ for kx in range(Lx):
             strout_right="%6d %6d %10.6f" % (k,sr,J[kr,0]) +'\n'
             f.write(strout_right)
             
-        if ky<Lx-1:  # Up   
-            strout_up="%6d %6d %10.6f" % (k,sd,J[kd,1]) +'\n'
-            f.write(strout_up)
+        if ky<Lx-1:  # down   
+            strout_down="%6d %6d %10.6f" % (k,sd,J[kd,1]) +'\n'
+            f.write(strout_down)
                   
         if ky > 0 and kx !=Lx-1: # Up Right
             # print(k,sur,kur)
