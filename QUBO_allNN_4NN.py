@@ -75,17 +75,17 @@ def get_Js(J=J,Lx=Lx):
             
             if kx<Lx-2:
                 JRR = J3[int(kRR),0]*1.
-                Js.update({k,RR}:JRR)
+                Js.update({(k,RR):JRR})
                 
             if ky<Lx-2:
                 JDD = J3[int(kDD),1]*1.
-                Js.update({k,DD}:JDD)
+                Js.update({(k,DD):JDD})
                
         
     return Js
 
 
-def econf(Lx,J,S0):
+def econf(Lx,J=J,J2=J2,J3=J3,S0):
   energy = 0.
   rs_count = 0
   ds_count = 0
@@ -97,13 +97,15 @@ def econf(Lx,J,S0):
           k = kx +(Lx*ky)
           R = (kx+1)  #right spin
           D = (ky+1)  #down spin 
+          RR = (kx+2)
+          DD = (ky+2)
           DR = (k+Lx+1)
           UR = k - (Lx-1)
 
           kR  = (k-ky) #coupling to the right of S0[kx,ky]
           kD  = k      #coupling to the down of S0[kx,ky]
-          kR  = (k-ky) #coupling to the right of S0[kx,ky]
-          kD  = k      #coupling to the down of S0[kx,ky]
+          kRR  = k - (2*ky) #coupling to the right of S0[kx,ky]
+          kDD  = k      #coupling to the down of S0[kx,ky]
         
           kUR = (k-Lx - (ky-1))    #coupling up right
           kDR = k-(ky)      #coupling down right
@@ -129,11 +131,20 @@ def econf(Lx,J,S0):
             DRs = S0[kx+1,ky+1]*J2[kDR,1]   # Tries to find a spin down, if no spin, contribution is 0.
             drs_count +=1
           except: DRs = 0.0
+          try:
+            if kx<Lx-2:
+                RRs = S0[RR,ky]*J3[kRR,0]
+          except: RRs = 0.0
+               
+          try:      
+            if ky<Lx-2:
+                DDs = J<S0[kx,DD]*J3[kDD,1]
+          except: DDs = 0.0      
 
-          nb = Rs + Ds + URs + DRs #+ Ls + Us
+          nb = Rs + Ds + URs + DRs +RRs + DDs  #+ Ls + Us
           S = S0[kx,ky]
           energy += -S*nb
-  print('rs',rs_count,'ds',ds_count,'urs',urs_count,'drs',drs_count) 
+  #print('rs',rs_count,'ds',ds_count,'urs',urs_count,'drs',drs_count) 
   return energy/(Lx**2)
 
 def run_on_qpu(Js,hs, sampler):
