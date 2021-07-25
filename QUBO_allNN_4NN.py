@@ -19,12 +19,12 @@ def get_token():
     return 'DEV-72e917fd4ea4ddce6f280027334fe5b8133d71c4'
 
 
-Lx=4
+Lx=10
 N=Lx**2
 np.random.seed(12345)
 J = (np.random.normal(0.0,1.0,size=(N-Lx,2)))*-1.
 J2 = (np.random.normal(0.0,1.0,size=((Lx-1)**2,2)))*-1.
-J3 = (np.random.normal(0.0,0.1,size=(((Lx-2)*Lx),2)))*1.
+J3 = (np.random.normal(0.0,1.0,size=(((Lx-2)*Lx),2)))*-1.
 
 Js = {} 
 hs = {}   
