@@ -85,7 +85,7 @@ def get_Js(J=J,Lx=Lx):
     return Js
 
 
-def econf(Lx,J=J,J2=J2,J3=J3,S0):
+def econf(Lx,J,J2,J3,S0):
   energy = 0.
   rs_count = 0
   ds_count = 0
@@ -132,13 +132,11 @@ def econf(Lx,J=J,J2=J2,J3=J3,S0):
             drs_count +=1
           except: DRs = 0.0
           try:
-            if kx<Lx-2:
-                RRs = S0[RR,ky]*J3[kRR,0]
+            RRs = S0[RR,ky]*J3[kRR,0]
           except: RRs = 0.0
                
-          try:      
-            if ky<Lx-2:
-                DDs = J<S0[kx,DD]*J3[kDD,1]
+          try:
+            DDs = S0[kx,DD]*J3[kDD,1]
           except: DDs = 0.0      
 
           nb = Rs + Ds + URs + DRs +RRs + DDs  #+ Ls + Us
@@ -166,7 +164,7 @@ def run_on_qpu(Js,hs, sampler):
 if __name__ == "__main__":
 
     
-    numruns = 1
+    numruns = 10
     Js = get_Js()
     
     # bqm = dimod.BQM.from_qubo(Js)
@@ -189,7 +187,7 @@ if __name__ == "__main__":
                 S0 = sample_set._record[i]['sample']
         
                 S0d = np.reshape(S0,(Lx,Lx),order='F')
-                energy = econf(Lx,J,S0d)
+                energy = econf(Lx,J,J2,J3,S0d)
                 
                 
                 configs.append(S0d)
@@ -202,4 +200,4 @@ if __name__ == "__main__":
         np.savetxt('energies'+str(k)+'.txt',energies)
 
 
-# dwave.inspector.show(sample_set)
+dwave.inspector.show(sample_set)
