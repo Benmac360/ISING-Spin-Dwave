@@ -136,27 +136,12 @@ def runMCMC(Nspins,Beta,Nvmcsteps,verbose,J,J2,J3,Lx,connect):
            elif   np.random.ranf() < np.exp(-Beta*DeltaH): #otherwise we accept based on the probability.
              S0[kx,ky]=-S0[kx,ky] #accept flip
             
-           # energies_correlated.append(econf(Lx,J,J2,J3,S0)) # Here we record the energy after each spin flip attempt.
+           #energies_correlated.append(econf(Lx,J,J2,J3,S0)) # Here we record the energy after each spin flip attempt.
          
 
 #    compute energy every Nsweep updates
      enow = econf(Lx,J,J2,J3,S0)
      
-     # energy = 0.
-     # for i in range(Lx):
-     #     for j in range(Lx):
-     #         k = i +(Lx*j)
-     #         if connect ==1:
-     #             S = S0[i,j]
-     #             nb = S0[(i+1)%Lx, j]*J[k,0] + S0[i,(j+1)%Lx]*J[k,1]
-     #             energy += -S*nb 
-     #         if connect ==2:
-     #             S = S0[i,j]
-     #             nb = S0[(i+1)%Lx, j]*J[k,0] + S0[i,(j+1)%Lx]*J[k,1]\
-     #                 +S0[(i+1)%Lx,(j+1)%Lx]*J2[k,1]+S0[(i+1)%Lx,(j-1)%Lx]*J2[k,0]
-     #             energy += (-S*nb)/(Lx**2)
-     # enow = energy
-
      eave+= enow
      eave2+=enow**2
      eavs.append(eave)
@@ -177,7 +162,7 @@ def runMCMC(Nspins,Beta,Nvmcsteps,verbose,J,J2,J3,Lx,connect):
   ### Saves the data here ####     
   np.save(str(Nspins)+'_lattice_2d_ising_spins_at_beta='+str(Beta),configs)
   np.savetxt(str(Nspins)+'_lattice_2d_ising_avg_energy_at_beta='+str(Beta)+'.txt',energies_data)
-  # np.savetxt('correlated_energy_at_beta='+str(Beta)+'.txt',energies_correlated)
+  #np.savetxt('correlated_energy_at_beta='+str(Beta)+'.txt',energies_correlated)
 
   strout='MCMC: %6f %10.6f %9.5f' % (Nvmcsteps,eave/ivmcp,np.sqrt((eave2/ivmcp-(eave/ivmcp)**2)/(ivmcp-1.)))
   print(strout)
@@ -195,7 +180,7 @@ S0 - The spins matrix
 Returns - Energy per spin
 '''
 @jit(nopython=True)
-def econf(Lx,J,J2,J3,S0,connect =3):
+def econf(Lx,J,J2,J3,S0,connect=3):
   energy = 0.
   for i in range(Lx):
       for j in range(Lx):
@@ -229,9 +214,9 @@ Lx = 10
 Nspins = Lx**2
 N = Nspins
 Beta = 2.0
-Nvmcsteps =10000
+Nvmcsteps =100000
 verbose = True
-connect = 1
+connect = 3
 ##J = np.loadtxt('Random_couplings.txt')
 J = (np.random.normal(0.0,1.0,size=(N-Lx,2)))
 J2 = (np.random.normal(0.0,1.0,size=((Lx-1)**2,2)))
@@ -297,5 +282,3 @@ J3[:,1] = Jvv
 ### RUNS THE MCMC SIMULATION ###
 
 RETURN_runMCMC=runMCMC(Nspins,Beta,Nvmcsteps,verbose,J,J2,J3,Lx,connect=3)
-    
-
