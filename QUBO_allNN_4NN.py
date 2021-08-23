@@ -26,6 +26,10 @@ J = (np.random.normal(0.0,1.0,size=(N-Lx,2)))*-1.
 J2 = (np.random.normal(0.0,1.0,size=((Lx-1)**2,2)))*-1.
 J3 = (np.random.normal(0.0,1.0,size=(((Lx-2)*Lx),2)))*-1.
 
+J = (np.random.normal(0.0,0.05,size=(N-Lx,2)))*-1. + J
+J2 = (np.random.normal(0.0,0.05,size=(N-Lx,2)))*-1. + J2
+J3 = (np.random.normal(0.0,0.05,size=(N-Lx,2)))*-1. + J3
+
 Js = {} 
 hs = {}   
 def get_Js(J=J,Lx=Lx):
